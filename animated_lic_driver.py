@@ -10,8 +10,9 @@ import matplotlib.pyplot as plt
 output_folder = "animated_lic"
 os.makedirs(path.join(output_folder, "images"), exist_ok=True)
 
-height, width = 280, 300
-motion_field = np.zeros((height, width, 2))
+height, width = 100, 100
+motion_field = np.zeros((height, width, 2)) # motion_field.shape = (280, 300, 2)
+
 for x in range(width):
     for y in range(height):
         delta_vec = np.array([x, y]) - np.array([int(height / 2), int(width / 2)])
