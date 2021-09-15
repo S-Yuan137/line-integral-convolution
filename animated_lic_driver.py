@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 output_folder = "animated_lic"
 os.makedirs(path.join(output_folder, "images"), exist_ok=True)
 
-height, width = 100, 100
+height, width = 150, 150
 motion_field = np.zeros((height, width, 2)) # motion_field.shape = (280, 300, 2)
 
 for x in range(width):
