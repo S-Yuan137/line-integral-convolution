@@ -1,6 +1,8 @@
 import numpy as np
 from numba import njit
-
+import matplotlib.pyplot as plt
+import h5py
+import time
 
 def get_noise(vectors):
     return np.random.rand(*(vectors.shape[0:2]))
@@ -76,3 +78,35 @@ def lic_flow(vectors, t=0, len_pix=5, noise=None):
                 backward_total += weight
             result[i, j] = (forward_sum + backward_sum) / (forward_total + backward_total)
     return result
+
+
+
+
+
+def show_grey(tex):
+    plt.figure()
+    tex = tex.T
+    plt.imshow(tex, origin = 'lower', cmap='Greys')
+
+def streamlines(Vx, Vy):
+    Vx, Vy = Vx.T, Vy.T
+    x = np.linspace(0, Vx.shape[0]-1, Vx.shape[0])
+    y = np.linspace(0, Vx.shape[1]-1, Vx.shape[1])
+    x, y = np.meshgrid(y, x)
+    print(x.shape, y.shape, Vx.shape)
+
+    plt.streamplot(x, y, Vx, Vy, density=1)
+
+
+if __name__ == "__main__":
+    with h5py.File("D:\CUHK\Data_from_zcao\struct01\struct01_snap52.h5", 'r') as f:
+        B_x = f['i_mag_field'][:,:,50]
+        B_y = f['j_mag_field'][:,:,50]
+        rho = f['gas_density'][:,:,50]
+    start_time = time.time()
+    show_grey(lic_flow(np.stack((B_y, B_x), axis=-1), t=0, len_pix=10))
+
+    streamlines(B_x, B_y)
+    print()
+    print("--- %.2f seconds ---" % (time.time() - start_time))
+    plt.show()
